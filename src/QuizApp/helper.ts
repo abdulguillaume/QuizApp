@@ -5,11 +5,25 @@ export function getIdAnswer() {
 }
 
 export function getIdQuestion() {
+
     return ++idQuestion;
 }
 
 export function getIdQuiz() {
-    return ++idQuiz;
+    //previous version was the expression {return ++idQuestion;} only
+    //now as i will be using localstorage
+    //check available quiz id in the localstorage
+    //i dont want to overwrite my quiz inside localstorage
+
+    let quiz_seq = localStorage.getItem("quiz_sequence");
+
+    if (quiz_seq == null) {
+        ++idQuiz;
+    } else {
+        idQuiz = parseInt(quiz_seq);
+    }
+
+    return idQuiz;
 }
 
 export function getRandomPosInArray(current_pos, maxval) {

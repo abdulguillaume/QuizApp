@@ -11,7 +11,18 @@ define(["require", "exports"], function (require, exports) {
     }
     exports.getIdQuestion = getIdQuestion;
     function getIdQuiz() {
-        return ++idQuiz;
+        //previous version was the expression {return ++idQuestion;} only
+        //now as i will be using localstorage
+        //check available quiz id in the localstorage
+        //i dont want to overwrite my quiz inside localstorage
+        var quiz_seq = localStorage.getItem("quiz_sequence");
+        if (quiz_seq == null) {
+            ++idQuiz;
+        }
+        else {
+            idQuiz = parseInt(quiz_seq);
+        }
+        return idQuiz;
     }
     exports.getIdQuiz = getIdQuiz;
     function getRandomPosInArray(current_pos, maxval) {

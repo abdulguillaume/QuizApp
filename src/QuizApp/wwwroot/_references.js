@@ -3,6 +3,7 @@
 /// <reference path="../addremlines.js" />
 /// <reference path="../helper.js" />
 /// <reference path="../quiz.js" />
+/// <reference path="../quizinterfaces4json2ts.js" />
 /// <reference path="../ui.js" />
 /// <reference path="helper.js" />
 /// <reference path="injectdynamicobjectvalidator.js" />

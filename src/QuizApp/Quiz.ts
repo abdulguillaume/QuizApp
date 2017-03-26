@@ -2,15 +2,24 @@
 
 import * as helper from './helper';
 
+import { IQuiz } from './quizInterfaces4Json2TS';
+
 export class Quiz {
 
     questions: Question[];
-    private id: number;
+    //private _id: number;
 
-    constructor(private name:string) {
-        this.id = helper.getIdQuiz();
+    constructor(private _name: string, private _id?: number) {
+
+        if (_id == null)
+            this._id = helper.getIdQuiz();
+        else
+            this._id = _id;
+
         this.questions = [];
     }
+
+
 
     addQuestionsToPool(...questions: Question[]) {
         for (let question of questions) {
@@ -18,10 +27,20 @@ export class Quiz {
         }
     }
 
+    get name() {
+        return this._name;
+    }
+
+    get id() {
+        return this._id;
+    }
+
     isValid() {
         //quiz is valid, when all questions are valid
         return this.questions.every(x => x.isValidForQuiz() == true);
     }
+
+   
 
     toString() {
 
@@ -72,13 +91,51 @@ export class Quiz {
 
         return this.finalScore();
     }
+
+
+
+    //static method that will allow me to convert my json data to a TS quiz instance
+    //when retrieving data from localstore, they are in json format
+    public static json2TS(json: IQuiz): Quiz
+    {
+        let quiz = new Quiz(json._name, json._id);
+
+        for (let obj of json.questions)
+        {
+            let answer = new Answer(obj.answer._definition, obj.answer._score, obj.answer._id);
+
+            let question = new Question(obj.sentence, answer, obj.canRetake, obj._id);
+
+            for (let a of obj.answer_pool)
+            {
+                if (obj.answer._id !== a._id)
+                {
+                    question.addAnswerToPool(
+                        new Answer(a._definition, a._score, a._id)
+                    );
+                }
+            }
+
+            quiz.addQuestionsToPool(question);
+        }
+
+        return quiz;
+
+    }
+
+
 }
 
 export class Answer {
-        private _id: number;
+        //private _id: number;
 
-        constructor(private _definition: string, private _score: number) {
-            this._id = helper.getIdAnswer();
+        constructor(private _definition: string, private _score: number, private _id?: number) {
+
+            if (_id == null)
+                this._id = helper.getIdAnswer();
+            else
+                this._id = _id;
+
             this._definition = helper.htmlTagReplace(this._definition);
         }
 
@@ -112,17 +169,21 @@ export class Answer {
     }
 
 export class Question {
-        private _id: number;
         private answer_pool: Answer[];
         private final_score: number;
 
-        constructor(private sentence: string, private answer: Answer, private canRetake: boolean) {
+        constructor(private sentence: string, private answer: Answer, private canRetake: boolean, private _id?: number) {
 
             this.sentence = helper.htmlTagReplace(this.sentence);
             this.answer_pool = [];
             this.answer_pool.push(answer);
             this.final_score = -1;
-            this._id = helper.getIdQuestion();
+
+            if (_id == null)
+                this._id = helper.getIdQuestion();
+            else
+                this._id = _id;
+
         }
 
         getAllAnswers() {

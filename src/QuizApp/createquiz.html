@@ -30,9 +30,11 @@
                         <legend>Question <a class="remQ" href="#">(-)</a></legend>
 
                         <div>
-                            <label for="sentence">question wording: </label><input type="text" name="sentence" class="required" /><br />
-                            <label for="manswer">main answer: </label><input type="text" name="manswer" class="required" /><br />
-                            <label for="mscore">main score: </label><input type="text" name="mscore" class="required" /><br />
+                            <label for="sentence">question wording: </label>
+                            <input type="text" name="sentence" class="required" /><br />
+                            <label for="manswer">correct answer: </label><input type="text" name="manswer" class="required" /><br />
+                            <label for="mscore"> score: </label>
+                            <input type="text" name="mscore" class="number required" /><br />
                             <select name="canRetake">
                                 <option value="0">No Retake</option>
                                 <option value="1">Can Retake</option>
@@ -49,13 +51,15 @@
                 
         </div>
 
+    <hr />
 
-   
+   <div>
+       <label>Quizzes List</label>
+       <ul id="quiz-list-ul"></ul>
+   </div>
 
     <script src="wwwroot/lib/jquery/dist/jquery.js"></script>
     <script src="wwwroot/lib/jquery-validation/dist/jquery.validate.js"></script>
-    <!--<script src="wwwroot/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
-    <script src="wwwroot/injectDynamicObjectValidator.js"></script>-->
     <script src="wwwroot/lib/requirejs-plugins/lib/require.js" data-main="AddRemLines"></script>
 
 </body> 

@@ -2,9 +2,14 @@ define(["require", "exports", "./helper"], function (require, exports, helper) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var Quiz = (function () {
-        function Quiz(name) {
-            this.name = name;
-            this.id = helper.getIdQuiz();
+        //private _id: number;
+        function Quiz(_name, _id) {
+            this._name = _name;
+            this._id = _id;
+            if (_id == null)
+                this._id = helper.getIdQuiz();
+            else
+                this._id = _id;
             this.questions = [];
         }
         Quiz.prototype.addQuestionsToPool = function () {
@@ -17,6 +22,20 @@ define(["require", "exports", "./helper"], function (require, exports, helper) {
                 this.questions.push(question);
             }
         };
+        Object.defineProperty(Quiz.prototype, "name", {
+            get: function () {
+                return this._name;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(Quiz.prototype, "id", {
+            get: function () {
+                return this._id;
+            },
+            enumerable: true,
+            configurable: true
+        });
         Quiz.prototype.isValid = function () {
             //quiz is valid, when all questions are valid
             return this.questions.every(function (x) { return x.isValidForQuiz() == true; });
@@ -53,14 +72,37 @@ define(["require", "exports", "./helper"], function (require, exports, helper) {
             q[0].isCorrectAnswer(answer_id);
             return this.finalScore();
         };
+        //static method that will allow me to convert my json data to a TS quiz instance
+        //when retrieving data from localstore, they are in json format
+        Quiz.json2TS = function (json) {
+            var quiz = new Quiz(json._name, json._id);
+            for (var _i = 0, _a = json.questions; _i < _a.length; _i++) {
+                var obj = _a[_i];
+                var answer = new Answer(obj.answer._definition, obj.answer._score, obj.answer._id);
+                var question = new Question(obj.sentence, answer, obj.canRetake, obj._id);
+                for (var _b = 0, _c = obj.answer_pool; _b < _c.length; _b++) {
+                    var a = _c[_b];
+                    if (obj.answer._id !== a._id) {
+                        question.addAnswerToPool(new Answer(a._definition, a._score, a._id));
+                    }
+                }
+                quiz.addQuestionsToPool(question);
+            }
+            return quiz;
+        };
         return Quiz;
     }());
     exports.Quiz = Quiz;
     var Answer = (function () {
-        function Answer(_definition, _score) {
+        //private _id: number;
+        function Answer(_definition, _score, _id) {
             this._definition = _definition;
             this._score = _score;
-            this._id = helper.getIdAnswer();
+            this._id = _id;
+            if (_id == null)
+                this._id = helper.getIdAnswer();
+            else
+                this._id = _id;
             this._definition = helper.htmlTagReplace(this._definition);
         }
         Object.defineProperty(Answer.prototype, "id", {
@@ -101,15 +143,19 @@ define(["require", "exports", "./helper"], function (require, exports, helper) {
     }());
     exports.Answer = Answer;
     var Question = (function () {
-        function Question(sentence, answer, canRetake) {
+        function Question(sentence, answer, canRetake, _id) {
             this.sentence = sentence;
             this.answer = answer;
             this.canRetake = canRetake;
+            this._id = _id;
             this.sentence = helper.htmlTagReplace(this.sentence);
             this.answer_pool = [];
             this.answer_pool.push(answer);
             this.final_score = -1;
-            this._id = helper.getIdQuestion();
+            if (_id == null)
+                this._id = helper.getIdQuestion();
+            else
+                this._id = _id;
         }
         Question.prototype.getAllAnswers = function () {
             return this.answer_pool;
