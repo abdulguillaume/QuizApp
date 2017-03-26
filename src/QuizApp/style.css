@@ -1,2 +1,44 @@
 ﻿body {
 }
+
+.correct {
+    border: 1px solid black;
+    background-color: greenyellow;
+}
+
+.wrong {
+    width: 20%;
+    background-color: salmon;
+}
+
+
+#score {
+    width: 20%;
+    background-color: beige;
+    color: forestgreen;
+}
+
+
+#answer-info-hidden,
+#question-info-hidden{
+    display: none;
+}
+
+
+.answer-info-line {
+    display:block;
+    clear: both;
+
+}
+
+.answer-info-col{
+float:left;
+}
+
+.error {
+color: red;
+}
+
+fieldset {
+    width:30%;
+}

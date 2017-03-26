@@ -1,41 +1,14 @@
-﻿namespace helper {
+﻿
 
-    let idAnswer = 0, idQuestion = 0;
+import * as helper from './helper';
 
-    export function getIdAnswer() {
-        return ++idAnswer;
-    }
-
-    export function getIdQuestion() {
-        return ++idQuestion;
-    }
-
-
-    export function getRandomPosInArray(current_pos, maxval) {
-        var pos;
-
-        while (true) {
-            pos = Math.floor(Math.random() * maxval);
-
-            //continue until you find a random number != to (current_pos)
-            if (pos != current_pos) {
-                return pos;
-            }
-        }
-    }
-
-    export function htmlTagReplace(data)
-    {
-        return data.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-    }
-}
-
-
-class Quiz {
+export class Quiz {
 
     questions: Question[];
+    private id: number;
 
-    constructor() {
+    constructor(private name:string) {
+        this.id = helper.getIdQuiz();
         this.questions = [];
     }
 
@@ -101,7 +74,7 @@ class Quiz {
     }
 }
 
-class Answer {
+export class Answer {
         private _id: number;
 
         constructor(private _definition: string, private _score: number) {
@@ -138,7 +111,7 @@ class Answer {
         }
     }
 
-class Question {
+export class Question {
         private _id: number;
         private answer_pool: Answer[];
         private final_score: number;
@@ -156,6 +129,10 @@ class Question {
             return this.answer_pool;
         }
 
+        getCanRetake()
+        {
+            return this.canRetake;
+        }
         getSentence() {
             return this.sentence;
         }
@@ -241,65 +218,3 @@ class Question {
     }
 
 
-let q1 = new Question("Javascript code can run on?", new Answer("All most common browsers(firefox, IR, Chrome, Safari etc.)", 2), false);
-q1.addAnswerToPool(new Answer("Internet Explorer only", 0));
-q1.addAnswerToPool(new Answer("Firefox only", 0));
-q1.addAnswerToPool(new Answer("Chrome only", 0));
-
-
-let q2 = new Question("Select the operating system in the provided list?", new Answer("Linux", 4), true);
-q2.addAnswerToPool(new Answer("HTML", 0));
-q2.addAnswerToPool(new Answer("TypeScript", 0));
-q2.addAnswerToPool(new Answer("Facebook", 0));
-q2.addAnswerToPool(new Answer("Whatever 1.0", 0));
-
-
-let q3 = new Question("How to add an external JavaScript to an html page?", new Answer("<script></script>", 5), true);
-q3.addAnswerToPool(new Answer("<body></body>", 0));
-q3.addAnswerToPool(new Answer("<link hfref=''>", 0));
-q3.addAnswerToPool(new Answer("<div></div>", 0));
-//q3.addAnswerToPool(new Answer("<head></head>", 0));
-q3.addAnswerToPool(new Answer("<javascript></javascript>", 0));
-
-let q4 = new Question("A switch is a?", new Answer("Layer 2 device", 2), false);
-q4.addAnswerToPool(new Answer("Layer 3 device", 0));
-q4.addAnswerToPool(new Answer("Layer 1 device", 0));
-
-let q5 = new Question("A router is a?", new Answer("Layer 3 device", 2), false);
-q5.addAnswerToPool(new Answer("Layer 2 device", 0));
-q5.addAnswerToPool(new Answer("Layer 1 device", 0));
-
-let quiz = new Quiz();
-quiz.addQuestionsToPool(q1, q2, q3, q4, q5);
-
-let divQuiz = document.getElementById("quiz");
-
-for (let question of quiz.questions) {
-
-    let ans_list = document.createElement("ol");
-
-    ans_list.innerHTML = question.getSentence();
-
-    for (let answer of question.getAllAnswers()) {
-
-        let ans = document.createElement("li");
-
-        let radio = document.createElement("input");
-        radio.setAttribute("type", "radio");
-        radio.setAttribute("name", question.id.toString());
-        radio.setAttribute("value", question.id.toString());
-        radio.setAttribute("id", answer.id.toString());
-
-        let label = document.createElement("label");
-        label.setAttribute("for", answer.id.toString());
-        label.innerHTML = answer.definition.toString();
-
-        ans.appendChild(radio);
-        ans.appendChild(label);
-
-        ans_list.appendChild(ans);
-    }
-
-    divQuiz.appendChild(ans_list);
-
-}

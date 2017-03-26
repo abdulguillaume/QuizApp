@@ -1,0 +1,62 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+
+    <link href="style.css" rel="stylesheet" />
+    
+</head>
+<body>
+    <form action="" method="post" id="quiz_form">
+        <div id="create_quiz">
+            <label for="quiz">Quiz name: </label><input type="text" id="quiz" name="quiz" class="required" />
+        </div>
+        <br />
+
+        <div id="question-info">
+            <a class="addQ" href="#">Add a question(+)</a>
+        </div>
+
+
+        <br />
+
+        <input type="submit" id="submit" value="Submit" />
+
+    </form>
+
+        <div id="question-info-hidden">
+                    <fieldset>
+                        <legend>Question <a class="remQ" href="#">(-)</a></legend>
+
+                        <div>
+                            <label for="sentence">question wording: </label><input type="text" name="sentence" class="required" /><br />
+                            <label for="manswer">main answer: </label><input type="text" name="manswer" class="required" /><br />
+                            <label for="mscore">main score: </label><input type="text" name="mscore" class="required" /><br />
+                            <select name="canRetake">
+                                <option value="0">No Retake</option>
+                                <option value="1">Can Retake</option>
+                            </select>
+                            <div>
+                                <a class="addA" href="#">Add(+)</a>
+                                <ul class="answer-list">
+                                    Other Answers(at least 2)
+                                </ul>
+                            </div>
+                        </div>
+
+                    </fieldset>
+                
+        </div>
+
+
+   
+
+    <script src="wwwroot/lib/jquery/dist/jquery.js"></script>
+    <script src="wwwroot/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <!--<script src="wwwroot/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+    <script src="wwwroot/injectDynamicObjectValidator.js"></script>-->
+    <script src="wwwroot/lib/requirejs-plugins/lib/require.js" data-main="AddRemLines"></script>
+
+</body> 
+</html>
