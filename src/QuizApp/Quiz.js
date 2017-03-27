@@ -37,8 +37,15 @@ define(["require", "exports", "./helper"], function (require, exports, helper) {
             configurable: true
         });
         Quiz.prototype.isValid = function () {
-            //quiz is valid, when all questions are valid
-            return this.questions.every(function (x) { return x.isValidForQuiz() == true; });
+            //quiz is valid, when all questions are valid and 
+            //have more than 4 questions
+            return (this.questions.every(function (x) { return x.isValidForQuiz() == true; }) &&
+                this.questions.length >= 3);
+        };
+        //quiz is complete when every single question is complete
+        Quiz.prototype.isComplete = function () {
+            if (this.questions.every(function (x) { return x.isComplete() === true; }))
+                throw new Error("The Quiz is Completed!");
         };
         Quiz.prototype.toString = function () {
             var res = "";
@@ -219,6 +226,9 @@ define(["require", "exports", "./helper"], function (require, exports, helper) {
                 this.answer.decreaseScore();
                 return false;
             }
+        };
+        Question.prototype.isComplete = function () {
+            return this.final_score > 0 || (this.final_score === 0 && this.answer.score == 0) || (this.final_score === 0 && !this.canRetake);
         };
         Question.prototype.isValidForQuiz = function () {
             //1 of the requirements - Give the user a minimum of 3 and no more than 5 choices

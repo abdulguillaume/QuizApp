@@ -5,6 +5,7 @@
     <title></title>
 
     <link href="style.css" rel="stylesheet" />
+    <link href="wwwroot/lib/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
     
 </head>
 <body>
@@ -42,7 +43,7 @@
                             <div>
                                 <a class="addA" href="#">Add(+)</a>
                                 <ul class="answer-list">
-                                    Other Answers(at least 2)
+                                    Other Answers(at least 2/Double on answer provided to delete entry)
                                 </ul>
                             </div>
                         </div>
@@ -54,10 +55,22 @@
     <hr />
 
    <div>
-       <label>Quizzes List</label>
+       <label>Quizzes List ( Double click on the quiz name to remove it from LocalStorage! )</label>
        <ul id="quiz-list-ul"></ul>
    </div>
 
+    <a href="index.html"></a>
+
+    <div id="dialog-form" class="dialog-box-elt">
+        <form>
+            <label for="name">Answer: </label>
+            <input type="text" id="dialog-answer" />
+            <button id="dialog-ok" class="dialog-box-elt">OK</button>
+            <button id="dialog-cancel" class="dialog-box-elt">Cancel</button>
+        </form>
+    </div>
+    
+    <a href="index.html">Return to Index Page!</a>
     <script src="wwwroot/lib/jquery/dist/jquery.js"></script>
     <script src="wwwroot/lib/jquery-validation/dist/jquery.validate.js"></script>
     <script src="wwwroot/lib/requirejs-plugins/lib/require.js" data-main="AddRemLines"></script>

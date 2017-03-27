@@ -4,46 +4,45 @@
 //i added jquery type definition(not use in project/not working)
 ///<reference path="@types/jquery" />
 
+
 let cnt = 1;
 
+let currentLinkElt: HTMLLinkElement;
+
 $("document").ready(function () {
+
+    $("#dialog-form").hide();
+
     $("#quiz_form").validate();
 
     LoadQuizzesList("li", "#quiz-list-ul");
-   // LoadQuizzesList("option", "#quiz-list-select");
-
-    if ($("#index").length)
-    {
-        alert("this is index page");
-    }
 });
 
 
-
-
-function LoadQuizzesList(tag:string, selector:string)
+export function LoadQuizzesList(tag:string, selector:string)
 {
     let quiz_list = $(selector);
 
     quiz_list.empty();
 
-    for (let i = 0; i < localStorage.length; i++)
-    {
+    for (let i = 0; i < localStorage.length; i++) {
         let s_id = localStorage.key(i);
 
-        if (s_id.toString().match(/^quiz_id_/) != null )
-        {
+        if (s_id.toString().match(/^quiz_id_/) != null) {
             let elt = document.createElement(tag);
 
+            if (tag == "li")
+            {
+                elt.classList.add("dblClickable");
+            }
+            
             let jsondata = JSON.parse(
-                    localStorage.getItem(s_id)
+                localStorage.getItem(s_id)
             );
 
             let quiz = proto.Quiz.json2TS(jsondata);
-
-            elt.innerHTML = quiz.name;
-
-            //alert(quiz.name);
+            
+            elt.innerHTML = `${quiz.id}: ${quiz.name}`;
 
             quiz_list.append(elt);
 
@@ -53,13 +52,14 @@ function LoadQuizzesList(tag:string, selector:string)
     
 }
 
+
+
 $("#quiz_form").submit(function (e) {
 
     if ($(this).valid())
     {
         let quiz = new proto.Quiz($("#quiz").val());
 
-        //question-info
         $(".question-info").each(function () {
             let sentence = $(this).find("[name^='sentence']").first().val();
 
@@ -77,20 +77,23 @@ $("#quiz_form").submit(function (e) {
             });
 
             quiz.addQuestionsToPool(question);
-
-            
+ 
         });
 
-        store_quiz(quiz);
+        if (quiz.isValid())
+            store_quiz(quiz);
+        else {
+            alert("The Quiz is valid when:\n-We have between 3 and 5 answers per question\n-At least 3 questions!");
+            e.preventDefault();
+        }
 
     }
-
 
 
 });
 
 
-function store_quiz(quiz: proto.Quiz) {
+export function store_quiz(quiz: proto.Quiz) {
     let quiz_seq = quiz.id;
     localStorage.setItem(`quiz_id_${quiz_seq}`, JSON.stringify(quiz));
     quiz_seq++;
@@ -112,9 +115,6 @@ $(".addQ").click(function (e) {
 
     cnt++;
 
-    //$.validator.unobtrusive.parseDynamicContent("#quiz_form");
-
-    //$("#quiz_form").validate();
 });
 
 $(".remQ").click(function () {
@@ -125,11 +125,78 @@ $(".remQ").click(function () {
 });
 
 $(".addA").click(function () {
-    let ans = prompt("Enter answer");
+
+    $("#dialog-form").show();
+
+    currentLinkElt = this;
+    
+});
+
+$("#dialog-ok").click(function (e) {
+    e.preventDefault();
+
+    let ans = $("#dialog-answer").val();
 
     if (ans != null && ans != "") {
         let elt = document.createElement("li");
-        elt.innerHTML = ans;
-        $(this).next("ul").append(elt);
+        //elt.classList.add("answer-li");
+        elt.classList.add("dblClickable");
+        elt.innerHTML = $("#dialog-answer").val();
+        $("#dialog-answer").val("");
+        $("#dialog-form").hide();
+        currentLinkElt.nextElementSibling.appendChild(elt);
     }
+
+});
+
+
+$("#dialog-cancel").click(function (e) {
+    e.preventDefault();
+    $("#dialog-answer").val("");
+    $("#dialog-form").hide();
+});
+
+//force the focus on the dialogbox if it is visible
+$("body").click(function (e) {
+
+    if (e.target.className !== "dialog-box-elt" && $("#dialog-form").is(":visible")) {
+        e.preventDefault();
+        $("#dialog-answer").focus();
+    }
+});
+
+
+//i tried with LI element but it is only working for the list of quizzes
+//not the list of answers per question
+$("body").dblclick(function (e) {
+
+    if (e.target.className == "dblClickable")
+    {
+
+        let quiz_text = e.target.textContent
+
+        let message: string;
+
+        let parent = e.target.parentElement;
+
+        if (parent.classList.contains("answer-list"))
+            message = `Do you want to Delete Answer -> ${quiz_text}?`;
+        else
+            message = `Do you want to Delete Quiz ${quiz_text}?`;
+
+        let delete_quiz = confirm(message);
+
+        if (delete_quiz == true) {
+            if (!parent.classList.contains("answer-list")) {
+                let quiz_id = quiz_text.split(":")[0];
+
+                localStorage.removeItem(`quiz_id_${quiz_id}`);
+            }
+
+            e.target.remove();
+        }
+
+    }
+
+
 });

@@ -36,11 +36,20 @@ export class Quiz {
     }
 
     isValid() {
-        //quiz is valid, when all questions are valid
-        return this.questions.every(x => x.isValidForQuiz() == true);
+        //quiz is valid, when all questions are valid and 
+        //have more than 4 questions
+        return (
+            this.questions.every(x => x.isValidForQuiz() == true) &&
+            this.questions.length>=3
+            );
     }
 
-   
+    //quiz is complete when every single question is complete
+    isComplete() {
+        if (this.questions.every(x => x.isComplete() === true))
+            throw new Error("The Quiz is Completed!");
+
+    }
 
     toString() {
 
@@ -250,6 +259,11 @@ export class Question {
                 this.answer.decreaseScore();
                 return false;
             }
+        }
+
+        isComplete()
+        {
+            return this.final_score > 0 || (this.final_score === 0 && this.answer.score == 0) || (this.final_score === 0 && !this.canRetake);
         }
 
         isValidForQuiz() {

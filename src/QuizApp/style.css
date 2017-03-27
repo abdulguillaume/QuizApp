@@ -2,15 +2,12 @@
 }
 
 .correct {
-    border: 1px solid black;
-    background-color: greenyellow;
+    color: forestgreen;
 }
 
 .wrong {
-    width: 20%;
-    background-color: salmon;
+    color: red;
 }
-
 
 #score {
     width: 20%;
@@ -41,4 +38,22 @@ color: red;
 
 fieldset {
     width:30%;
+}
+
+#dialog-form {
+
+border: 1px solid black;
+background-color: beige;
+position:fixed;
+top: 30%;
+left: 30%;
+margin-top: -70px;
+margin-left: -50px;
+height: 100px;
+width: 200px;
+padding: 10px;
+
+}
+#dialog-answer {
+    display:block;
 }

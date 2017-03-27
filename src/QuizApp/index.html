@@ -3,17 +3,19 @@
 <head>
     <meta charset="utf-8" />
     <title>Quiz App (Coder Camps)</title>
-    <!--<script src="Quiz.js"></script>-->
     <link href="style.css" rel="stylesheet" />
-    <script src="wwwroot/lib/jquery/dist/jquery.js"></script>
-    <script src="wwwroot/lib/requirejs-plugins/lib/require.js" data-main="UI"></script>
+
 </head>
 <body id="index">
 
     <div>
         <label>Select a quiz</label>
         <select id="quiz-list-select"></select>
+        <button type="button" name="start" id="start_quiz">Start Quiz</button>
+        <br />
+        <a href="createquiz.html">Create a new QUIZ</a>
     </div>
+    <hr />
     <div id="quiz">
 
     </div>
@@ -21,5 +23,10 @@
     <div id="score">
 
     </div>
+
+    <script src="wwwroot/lib/jquery/dist/jquery.js"></script>
+    <script src="wwwroot/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="wwwroot/lib/requirejs-plugins/lib/require.js" data-main="UI"></script>
+
 </body>
 </html>
